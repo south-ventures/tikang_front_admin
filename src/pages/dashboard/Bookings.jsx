@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { format, isAfter, isWithinInterval } from "date-fns";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -22,18 +22,7 @@ const Bookings = () => {
   const API_URL = process.env.REACT_APP_API_URL;
   const API_URL_ADMIN = process.env.REACT_APP_API_URL_ADMIN;
 
-  useEffect(() => {
-    const init = async () => {
-      if (!user && !loading) {
-        const fetched = await fetchUser();
-        if (!fetched) return navigate("/login");
-      }
-      await fetchBookings();
-    };
-    init();
-  }, [user, loading]);
-
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL_ADMIN}/bookings`, {
         headers: {
@@ -46,7 +35,18 @@ const Bookings = () => {
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
     }
-  };
+  }, [API_URL_ADMIN]);
+
+  useEffect(() => {
+    const init = async () => {
+      if (!user && !loading) {
+        const fetched = await fetchUser();
+        if (!fetched) return navigate("/login");
+      }
+      await fetchBookings();
+    };
+    init();
+  }, [user, loading, fetchBookings, fetchUser, navigate]);
 
   const handleAcceptPayment = async (booking) => {
     const confirm = window.confirm("Confirm accepting this payment?");

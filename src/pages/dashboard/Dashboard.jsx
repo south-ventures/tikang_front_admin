@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import DashboardNavBar from "../../components/Navbar";
@@ -15,19 +15,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL_ADMIN;
 
-  useEffect(() => {
-    const init = async () => {
-      if (!user && !loading) {
-        const fetched = await fetchUser();
-        if (!fetched) return navigate("/login");
-      }
-      await fetchDashboardStats();
-      setInitializing(false);
-    };
-    init();
-  }, [user, loading]);
-
-  const fetchDashboardStats = async () => {
+  const fetchDashboardStats = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/dashboard-stats`, {
         headers: {
@@ -43,7 +31,19 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching dashboard stats:", err);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    const init = async () => {
+      if (!user && !loading) {
+        const fetched = await fetchUser();
+        if (!fetched) return navigate("/login");
+      }
+      await fetchDashboardStats();
+      setInitializing(false);
+    };
+    init();
+  }, [user, loading, fetchDashboardStats, fetchUser, navigate]);
 
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);

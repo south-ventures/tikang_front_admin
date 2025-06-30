@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  FaUserCheck,
-  FaUserClock,
   FaUsers,
   FaChevronRight,
   FaTimes,
@@ -379,33 +377,33 @@ const ReportedUserTable = ({ reports, onView }) => (
   </div>
 );
 
-const ReportDetailsModal = ({ report, onClose }) => {
-  if (!report) return null;
+// const ReportDetailsModal = ({ report, onClose }) => {
+//   if (!report) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-4">
-      <div className="bg-white p-6 rounded-xl max-w-lg w-full relative shadow-xl max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-red-500">
-          <FaTimes size={20} />
-        </button>
-        <h2 className="text-xl font-bold mb-4 text-gray-800">Report Details</h2>
-        <div className="space-y-2 text-sm text-gray-700">
-          <p><strong>Report ID:</strong> {report.report_id}</p>
-          <p><strong>Reported User ID:</strong> {report.user_id}</p>
-          <p><strong>Reported Name:</strong> {report.reported_name}</p>
-          <p><strong>Sender ID:</strong> {report.sender_id}</p>
-          <p><strong>Sender Name:</strong> {report.sender_name}</p>
-          <p><strong>Status:</strong> {report.status}</p>
-          <p><strong>Time:</strong> {new Date(report.created_at).toLocaleString()}</p>
-          <p><strong>Comments:</strong></p>
-          <div className="bg-gray-50 p-3 rounded text-sm text-gray-800 border">
-            {report.comments}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 px-4">
+//       <div className="bg-white p-6 rounded-xl max-w-lg w-full relative shadow-xl max-h-[90vh] overflow-y-auto">
+//         <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-red-500">
+//           <FaTimes size={20} />
+//         </button>
+//         <h2 className="text-xl font-bold mb-4 text-gray-800">Report Details</h2>
+//         <div className="space-y-2 text-sm text-gray-700">
+//           <p><strong>Report ID:</strong> {report.report_id}</p>
+//           <p><strong>Reported User ID:</strong> {report.user_id}</p>
+//           <p><strong>Reported Name:</strong> {report.reported_name}</p>
+//           <p><strong>Sender ID:</strong> {report.sender_id}</p>
+//           <p><strong>Sender Name:</strong> {report.sender_name}</p>
+//           <p><strong>Status:</strong> {report.status}</p>
+//           <p><strong>Time:</strong> {new Date(report.created_at).toLocaleString()}</p>
+//           <p><strong>Comments:</strong></p>
+//           <div className="bg-gray-50 p-3 rounded text-sm text-gray-800 border">
+//             {report.comments}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 
 const BlockedUsersTable = ({ users = [], onViewMore, onUnblock }) => {
@@ -514,7 +512,7 @@ export default function Users() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [reportedUsers, setReportedUsers] = useState([]);
-  const [selectedReport, setSelectedReport] = useState(null);
+  const [setSelectedReport] = useState(null);
   const navigate = useNavigate();
 
   const loadAllUsers = async () => {

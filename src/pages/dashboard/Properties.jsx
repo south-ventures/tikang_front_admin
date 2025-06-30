@@ -7,7 +7,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { FaTimes } from 'react-icons/fa';
 
 export default function Properties() {
-  const { user, token, fetchUser, loading } = useAuth();
+  const { user, fetchUser, loading } = useAuth();
   const [properties, setProperties] = useState([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -93,7 +93,7 @@ export default function Properties() {
       }
     };
     init();
-  }, [user, loading]);
+  }, [user, loading, fetchUser, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50">

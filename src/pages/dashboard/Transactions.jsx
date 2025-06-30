@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { format } from "date-fns";
 import DashboardNavBar from "../../components/Navbar";
 import DashboardTabs from "./DashboardTabs";
@@ -18,10 +18,12 @@ const Transactions = () => {
   const [loadingTx, setLoadingTx] = useState(true);
   const [selectedTx, setSelectedTx] = useState(null);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL_ADMIN}/transactions`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("tikangToken")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('tikangToken')}`,
+        },
       });
       const data = await res.json();
       if (res.ok) {
@@ -31,29 +33,36 @@ const Transactions = () => {
         setTransactions(sorted);
       }
     } catch (err) {
-      console.error("Error fetching transactions:", err);
+      console.error('Error fetching transactions:', err);
     }
-  };
-
-  const fetchWalletTransactions = async () => {
+  }, [API_URL_ADMIN]);
+  
+  const fetchWalletTransactions = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL_ADMIN}/wallet-transactions`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("tikangToken")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('tikangToken')}`,
+        },
       });
       const data = await res.json();
       if (res.ok) {
         const sorted = data.transactions
-          .filter((tx) => tx.status === "pending")
+          .filter((tx) => tx.status === 'pending')
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setWalletTx(sorted);
       }
     } catch (err) {
-      console.error("Error fetching wallet transactions:", err);
+      console.error('Error fetching wallet transactions:', err);
     } finally {
       setLoadingTx(false);
     }
-  };
-
+  }, [API_URL_ADMIN]);
+  
+  useEffect(() => {
+    fetchTransactions();
+    fetchWalletTransactions();
+  }, [fetchTransactions, fetchWalletTransactions]);
+  
   const handleConfirmWallet = async (tx_id, amount, user_id, type) => {
     try {
       const res = await fetch(`${API_URL_ADMIN}/accept-wallet-transaction`, {
@@ -94,7 +103,7 @@ const Transactions = () => {
       await fetchWalletTransactions();
     };
     init();
-  }, [user, loading]);
+  }, [user, loading, fetchTransactions, fetchUser, fetchWalletTransactions, navigate]);
 
   return (
     <div className="min-h-screen bg-gray-100">
