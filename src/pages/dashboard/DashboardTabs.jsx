@@ -26,7 +26,7 @@ export default function DashboardTabs() {
   };
 
   return (
-    <div className="fixed top-[72px] left-1/2 transform -translate-x-1/2 z-40 bg-white rounded-xl shadow-md px-6 py-2 flex gap-6">
+    <div className="fixed top-[100px] left-1/2 transform -translate-x-1/2 z-40 bg-white rounded-xl shadow-md px-6 py-2 flex gap-6">
       {tabs.map((tab) => {
         const isActive = pathname === tab.path;
 
