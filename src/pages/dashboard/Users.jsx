@@ -61,9 +61,8 @@ const AllUserTable = ({ users, onViewMore }) => {
   // Filter out admin users
   const nonAdminUsers = users.filter(u => u.user_type !== "admin");
 
-  // Sort by unverified first
   const sortedUsers = [...nonAdminUsers].sort((a, b) => {
-    return Number(a.user_verify) - Number(b.user_verify); // false (0) comes before true (1)
+    return new Date(b.created_at) - new Date(a.created_at);
   });
 
   return (
@@ -290,7 +289,29 @@ const UserDetailsModal = ({ user, onClose }) => {
           <p><strong>Phone Verified:</strong> {user.phone_verify ? 'Yes' : 'No'}</p>
           <p><strong>User Verified:</strong> {user.user_verify ? 'Yes' : 'No'}</p>
         </div>
-
+        {/* Documents Section */}
+          {user.documents && user.documents.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Uploaded Documents</h3>
+              <ul className="list-disc list-inside space-y-2 text-blue-700">
+                {user.documents.map((filename, index) => {
+                  const fileUrl = `${process.env.REACT_APP_API_URL}${filename}`;
+                  return (
+                    <li key={index}>
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-blue-500"
+                      >
+                        📄 {filename}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         <div className="mt-6 flex flex-wrap justify-end gap-3 border-t pt-4">
           {user.email_verify === 'no' && (
             <button

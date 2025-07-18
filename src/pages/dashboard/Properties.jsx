@@ -207,8 +207,30 @@ export default function Properties() {
                 <p className="text-sm text-gray-600">Email: {selectedProperty.lessor_email}</p>
                 <p className="text-sm text-gray-600">Phone: {selectedProperty.lessor_phone}</p>
                 <p className="text-sm text-gray-600">Tikang Cash: ₱{selectedProperty.tikang_cash}</p>
+                {/* Documents Section */}
+                  {selectedProperty.documents && selectedProperty.documents.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold text-gray-700 mt-4">Documents:</h4>
+                      <ul className="list-disc list-inside space-y-1 text-blue-700 text-sm">
+                        {selectedProperty.documents.map((doc, i) => {
+                          const fileUrl = `${API_URL}/uploads/documents/${doc}`;
+                          return (
+                            <li key={i}>
+                              <a
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline hover:text-blue-500"
+                              >
+                                📄 {doc}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
               </div>
-
               <div>
                 <h4 className="font-semibold text-gray-700 mt-4">Rooms:</h4>
                 {selectedProperty.rooms?.length === 0 ? (
