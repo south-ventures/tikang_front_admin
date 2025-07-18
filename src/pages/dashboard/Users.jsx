@@ -535,6 +535,8 @@ export default function Users() {
   const [reportedUsers, setReportedUsers] = useState([]);
   const [setSelectedReport] = useState(null);
   const navigate = useNavigate();
+  const [filterGuest, setFilterGuest] = useState(false);
+  const [filterOwner, setFilterOwner] = useState(false);
 
   const loadAllUsers = async () => {
     try {
@@ -698,22 +700,38 @@ export default function Users() {
           />
         </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <h2 className="text-lg font-bold text-gray-700 mb-2">Guests</h2>
-            <AllUserTable
-              users={filteredUsers.filter(u => u.user_type === "guest")}
-              onViewMore={setSelectedUser}
-            />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-gray-700 mb-2">Owners</h2>
-            <AllUserTable
-              users={filteredUsers.filter(u => u.user_type === "owner")}
-              onViewMore={setSelectedUser}
-            />
+        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-bold text-gray-700">User Table (Guest & Owner)</h2>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center space-x-1 text-sm text-gray-600">
+              <input
+                type="checkbox"
+                checked={filterGuest}
+                onChange={() => setFilterGuest(!filterGuest)}
+              />
+              <span>Guest</span>
+            </label>
+            <label className="flex items-center space-x-1 text-sm text-gray-600">
+              <input
+                type="checkbox"
+                checked={filterOwner}
+                onChange={() => setFilterOwner(!filterOwner)}
+              />
+              <span>Owner</span>
+            </label>
           </div>
         </div>
+        <AllUserTable
+          users={filteredUsers.filter((u) => {
+            if (filterGuest && filterOwner) return u.user_type === "guest" || u.user_type === "owner";
+            if (filterGuest) return u.user_type === "guest";
+            if (filterOwner) return u.user_type === "owner";
+            return u.user_type === "guest" || u.user_type === "owner";
+          })}
+          onViewMore={setSelectedUser}
+        />
+      </div>
 
           {selectedUser && (
             <UserDetailsModal user={selectedUser} onClose={() => setSelectedUser(null)} />
